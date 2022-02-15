@@ -46,10 +46,15 @@ def tokenize(text):
 def build_model():
     pipeline = Pipeline([('vect', CountVectorizer(tokenizer=tokenize)),
                         ('tf-idf', TfidfTransformer()),
-                        ('clf', MultiOutputClassifier(RandomForestClassifier(random_state=42, class_weight="balanced", 
-                                                                            max_depth=150, min_samples_leaf = 5, min_samples_split=20,
-                                                                            n_estimators=200)))])
-    return pipeline
+                        ('clf', MultiOutputClassifier(RandomForestClassifier(random_state=42, class_weight="balanced")))])
+    parameters = {'clf__estimator__n_estimators': [200, 250],
+              'clf__estimator__max_depth': [100, 150],
+              'clf__estimator__min_samples_split': [20, 25],
+              'clf__estimator__min_samples_leaf': [5, 10]
+             }
+    cv = GridSearchCV(estimator=pipeline, param_grid=parameters, scoring='f1_weighted', n_jobs=-1)
+
+    return cv
 
 def evaluate_model(model, X_test, Y_test, category_names):
     Y_pred = model.predict(X_test)
