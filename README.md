@@ -1,25 +1,14 @@
 # Disaster Response Pipeline Project
-### Description
+### Description:
 This project is part of Data Science Nanodegree Program by Udacity. The goal is to build a NLP model that classify pre-labeled disaster messages, so that the messages
 can be sent to the relevant organization. 
 
 The project consists of 3 parts:
-    1. Data Processing
-    - data
-    |- disaster_categories.csv  # data to process 
-    |- disaster_messages.csv  # data to process
-    |- process_data.py
-    |- InsertDatabaseName.db   # database to save clean data to
-    2. Machine Learning Pipeline 
-    - models
-    |- train_classifier.py
-    |- classifier.pkl  # saved model 
-    3. Web App
-    - app
-    | - template
-    | |- master.html  # main page of web app
-    | |- go.html  # classification result page of web app
-    |- run.py  # Flask file that runs app
+    <ol>
+    <li>Data Processing - prepare an ETL pipeline to extract data from sources, transform to the proper format, and load to a database</li>
+    <li>Machine Learning Pipeline - build a NLP pipeline to classify the text messages </li>
+    <li>Web App - build a web app to view and classify in real time</li>
+    </ol>
 
 ### Instructions:
 1. Run the following commands in the project's root directory to set up your database and model.
