@@ -32,7 +32,7 @@ def load_data(database_filepath):
         category_names - target labels
     '''
     engine = create_engine('sqlite:///{}'.format(database_filepath))
-    df = pd.read_sql('SELECT * FROM disaster_response_message', con=engine)
+    df = pd.read_sql('SELECT * FROM disaster_response', con=engine)
     X = df['message']
     y = df.iloc[:, 4:]
     category_names = y.columns
