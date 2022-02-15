@@ -4,12 +4,25 @@ from sqlalchemy import create_engine
 
 
 def load_data(messages_filepath, categories_filepath):
+    '''
+    INPUT:
+        messages_filepath - path to messages.csv
+        categories_filepath - path to categories.csv
+    OUTPUT:
+        df - prepared df
+    '''
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
     df = messages.merge(categories, how='inner', on='id')
     return df
 
 def clean_data(df):
+    '''
+    INPUT:
+        df - preprocessed df
+    OUTPUT:
+        df - cleaned df
+    '''
     categories = df.categories.str.split(';', expand=True)
     row = categories.iloc[0, :]
     category_colnames = row.apply(lambda x: x[:-2])
@@ -24,6 +37,13 @@ def clean_data(df):
 
 
 def save_data(df, database_filepath):
+    '''
+    INPUT:
+        df - cleaned df
+        database_filepath - path to store db at
+    OUTPUT:
+        None - save the table to db file
+    '''
     engine = create_engine('sqlite:///{}'.format(database_filepath))
     df.to_sql('disaster_response', engine, index=False, if_exists='replace')  
 

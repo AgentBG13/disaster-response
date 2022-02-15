@@ -22,6 +22,15 @@ nltk.download('wordnet')
 
 
 def load_data(database_filepath):
+    '''
+    load data to build the classification model
+    INPUT:
+        database_filepath - path to the db file
+    OUTPUT:
+        X - feature
+        y - target variables in numerical format 
+        category_names - target labels
+    '''
     engine = create_engine('sqlite:///{}'.format(database_filepath))
     df = pd.read_sql('SELECT * FROM disaster_response_message', con=engine)
     X = df['message']
@@ -33,6 +42,12 @@ def load_data(database_filepath):
 
 
 def tokenize(text):
+    '''
+    INPUT:
+        text - preprocessed text
+    OUTPUT:
+        tokens - tokenized message
+    '''
     text = re.sub(r'[^0-9A-Za-z]', ' ', text).lower()
     tokens = word_tokenize(text)
     
@@ -44,6 +59,11 @@ def tokenize(text):
 
 
 def build_model():
+    '''
+    build the model by performing grid search cv
+    OUTPUT:
+        cv - model to perform grid search
+    '''
     pipeline = Pipeline([('vect', CountVectorizer(tokenizer=tokenize)),
                         ('tf-idf', TfidfTransformer()),
                         ('clf', MultiOutputClassifier(RandomForestClassifier(random_state=42, class_weight="balanced")))])
@@ -57,11 +77,24 @@ def build_model():
     return cv
 
 def evaluate_model(model, X_test, Y_test, category_names):
+    """
+    Print precision, recall, f1 scores for each category
+    INPUT:
+        model - ML model
+        X_test - test message
+        Y_test - target variable for test messages
+        category_names - target test labels
+    """
     Y_pred = model.predict(X_test)
     print(classification_report(Y_test, Y_pred, target_names=category_names))
 
 
 def save_model(model, model_filepath):
+    '''
+    INPUT:
+        model - ML model
+        model_filepath - location to save the model
+    '''
     pickle.dump(model, open(model_filepath, "wb"))
 
 
